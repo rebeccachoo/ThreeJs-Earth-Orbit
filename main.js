@@ -68,10 +68,9 @@ class App {
     const solarSystem = new THREE.Object3D();
     this._scene.add(solarSystem);
     const sphereGeometry = new THREE.SphereGeometry(1, 12, 12);
-    const sunMaterial = new THREE.MeshPhongMaterial({
-      emissive: 0xffff00,
-      flatShading: true,
-    });
+    const sunTexture = new THREE.TextureLoader().load("sun.jpeg");
+    const sunMaterial = new THREE.MeshPhongMaterial();
+    sunMaterial.map = sunTexture;
     const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial);
     sunMesh.scale.set(3, 3, 3);
     solarSystem.add(sunMesh);
@@ -80,11 +79,16 @@ class App {
     const earthOrbit = new THREE.Object3D();
     solarSystem.add(earthOrbit);
 
-    const earthMaterial = new THREE.MeshPhongMaterial({
-      color: 0x2233ff,
-      emissive: 0x112244,
-      flatShading: true,
-    });
+    // const earthMaterial = new THREE.MeshPhongMaterial({
+    //   color: 0x2233ff,
+    //   emissive: 0x112244,
+    //   flatShading: true,
+    // });
+
+    const earthMaterial = new THREE.MeshPhongMaterial();
+    const texture = new THREE.TextureLoader().load("earth.jpg");
+    earthMaterial.map = texture;
+
     const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
     earthOrbit.position.x = 10;
     earthOrbit.add(earthMesh);
@@ -98,7 +102,16 @@ class App {
       emissive: 0x222222,
       flatShading: true,
     });
-    const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
+    const moonTexture = new THREE.TextureLoader().load("moon.jpg");
+    const normalTexture = new THREE.TextureLoader().load("normal.jpg");
+
+    const moonMesh = new THREE.Mesh(
+      sphereGeometry,
+      new THREE.MeshStandardMaterial({
+        map: moonTexture,
+        normalMap: normalTexture,
+      })
+    );
     moonMesh.scale.set(0.5, 0.5, 0.5);
     moonOrbit.add(moonMesh);
 
