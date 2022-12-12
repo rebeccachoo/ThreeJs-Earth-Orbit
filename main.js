@@ -87,6 +87,18 @@ class App {
     mercuryOrbit.position.x = 10;
     mercuryOrbit.add(mercuryMesh);
 
+    /** Venus */
+    const venusOrbit = new THREE.Object3D();
+    solarSystem.add(venusOrbit);
+
+    const venusMaterial = new THREE.MeshPhongMaterial();
+    const venusTexture = new THREE.TextureLoader().load("venus.jpeg");
+    venusMaterial.map = venusTexture;
+
+    const venusMesh = new THREE.Mesh(sphereGeometry, venusMaterial);
+    venusOrbit.position.x = 14;
+    venusOrbit.add(venusMesh);
+
     /* Earth */
     const earthOrbit = new THREE.Object3D();
     solarSystem.add(earthOrbit);
@@ -96,7 +108,7 @@ class App {
     earthMaterial.map = texture;
 
     const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
-    earthOrbit.position.x = 30;
+    earthOrbit.position.x = 25;
     earthOrbit.add(earthMesh);
 
     /* Moon */
@@ -121,6 +133,7 @@ class App {
     moonOrbit.add(moonMesh);
 
     this._solarSystem = solarSystem;
+    this._mercuryOrbit = mercuryOrbit;
     this._earthOrbit = earthOrbit;
     this._moonOrbit = moonOrbit;
   }
@@ -152,6 +165,7 @@ class App {
 
     this._solarSystem.rotation.y = time / 2;
     this._earthOrbit.rotation.y = time / 2;
+    this._earthOrbit.rotation.y = time / 10;
     this._moonOrbit.rotation.y = time * 5;
   }
 }
