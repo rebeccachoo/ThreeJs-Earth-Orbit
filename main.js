@@ -1,69 +1,3 @@
-// import * as THREE from "./build/three.module";
-// import { OrbitControls } from "./libs/three137/OrbitControls.js";
-
-// class App {
-//   constructor() {
-//     const divContainer = document.querySelector("#webgl-container");
-//     this._divContainer = divContainer;
-
-//     const renderer = new THREE.WebGLRenderer({ antialias: true });
-//     renderer.setPixelRatio(window.devicePixelRatio);
-//     divContainer.appendChild(renderer.domElement);
-//     this._renderer = renderer;
-
-//     const scene = new THREE.Scene();
-//     this._scene = scene;
-
-//     this._setupCamera();
-//     this._setupLight();
-//     this._setupModel();
-//     this._setupControls();
-
-//     window.onresize = this.resize.bind(this);
-//     this.resize();
-//     requestAnimationFrame(this.render.bind(this));
-//   }
-
-//   _setupControls() {
-//     new OrbitControls(this._camera, this._divContainer);
-//   }
-
-//   _setupCamera() {
-//     const width = this._divContainer.clientWidth;
-//     const height = this._divContainer.clientHeight;
-//     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-//     camera.position.z = 10;
-//     this._camera = camera;
-//   }
-//   _setupLight() {
-//     const color = 0xffffff;
-//     const intensity = 1;
-//     const light = new THREE.DirectionalLight(color, intensity);
-//     light.position.set(-1, 2, 4);
-//     this._scene.add(light);
-//   }
-//   _setupModel() {}
-//   resize() {
-//     const width = this._divContainer.clientWidth;
-//     const height = this._divContainer.clientHeight;
-//     this._camera.aspect = width / height;
-//     this._camera.updateProjectionMatrix();
-//     this.renderer.setSize(width, height);
-//   }
-//   render(time) {
-//     this._renderer.render(this._scene, this._camera);
-//     this.update(time);
-//     requestAnimationFrame(this.render.bind(this));
-//   }
-//   update(time) {
-//     time *= 0.001;
-//   }
-// }
-
-// window.onload = function () {
-//   new App();
-// };
-
 import * as THREE from "../build/three.module.js";
 import { OrbitControls } from "../libs/three137/OrbitControls.js";
 
@@ -82,6 +16,10 @@ class App {
     this._renderer = renderer;
 
     const scene = new THREE.Scene();
+
+    const spaceTexture = new THREE.TextureLoader().load("space.jpg");
+    scene.background = spaceTexture;
+
     this._scene = scene;
 
     /* 밑줄로 시작하는 field 와 method는 App 클래스 내부에서만 사용된다는 의미로 씀.
@@ -111,7 +49,7 @@ class App {
     const height = this._divContainer.clientHeight;
     /* 크기를 이용해서 카메라 객체 생성 */
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-    camera.position.z = 10;
+    camera.position.z = 20;
     this._camera = camera;
   }
 
@@ -149,8 +87,24 @@ class App {
     });
     const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
     earthOrbit.position.x = 10;
+    earthOrbit.add(earthMesh);
+
+    const moonOrbit = new THREE.Object3D();
+    moonOrbit.position.x = 5;
+    earthOrbit.add(moonOrbit);
+
+    const moonMaterial = new THREE.MeshPhongMaterial({
+      color: 0x888888,
+      emissive: 0x222222,
+      flatShading: true,
+    });
+    const moonMesh = new THREE.Mesh(sphereGeometry, moonMaterial);
+    moonMesh.scale.set(0.5, 0.5, 0.5);
+    moonOrbit.add(moonMesh);
 
     this._solarSystem = solarSystem;
+    this._earthOrbit = earthOrbit;
+    this._moonOrbit = moonOrbit;
   }
 
   resize() {
