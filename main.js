@@ -49,7 +49,7 @@ class App {
     const height = this._divContainer.clientHeight;
     /* 크기를 이용해서 카메라 객체 생성 */
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-    camera.position.z = 20;
+    camera.position.z = 30;
     this._camera = camera;
   }
 
@@ -75,28 +75,34 @@ class App {
     sunMesh.scale.set(3, 3, 3);
     solarSystem.add(sunMesh);
 
+    /** Mercury */
+    const mercuryOrbit = new THREE.Object3D();
+    solarSystem.add(mercuryOrbit);
+
+    const mercuryMaterial = new THREE.MeshPhongMaterial();
+    const mercuryTexture = new THREE.TextureLoader().load("mercury.jpg");
+    mercuryMaterial.map = mercuryTexture;
+
+    const mercuryMesh = new THREE.Mesh(sphereGeometry, mercuryMaterial);
+    mercuryOrbit.position.x = 10;
+    mercuryOrbit.add(mercuryMesh);
+
     /* Earth */
     const earthOrbit = new THREE.Object3D();
     solarSystem.add(earthOrbit);
-
-    // const earthMaterial = new THREE.MeshPhongMaterial({
-    //   color: 0x2233ff,
-    //   emissive: 0x112244,
-    //   flatShading: true,
-    // });
 
     const earthMaterial = new THREE.MeshPhongMaterial();
     const texture = new THREE.TextureLoader().load("earth.jpg");
     earthMaterial.map = texture;
 
     const earthMesh = new THREE.Mesh(sphereGeometry, earthMaterial);
-    earthOrbit.position.x = 10;
+    earthOrbit.position.x = 30;
     earthOrbit.add(earthMesh);
 
+    /* Moon */
     const moonOrbit = new THREE.Object3D();
     moonOrbit.position.x = 5;
     earthOrbit.add(moonOrbit);
-
     const moonMaterial = new THREE.MeshPhongMaterial({
       color: 0x888888,
       emissive: 0x222222,
@@ -104,7 +110,6 @@ class App {
     });
     const moonTexture = new THREE.TextureLoader().load("moon.jpg");
     const normalTexture = new THREE.TextureLoader().load("normal.jpg");
-
     const moonMesh = new THREE.Mesh(
       sphereGeometry,
       new THREE.MeshStandardMaterial({
