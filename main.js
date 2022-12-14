@@ -1,5 +1,6 @@
 import * as THREE from "../build/three.module.js";
 import { OrbitControls } from "../libs/three137/OrbitControls.js";
+// import {Planet} from "./planet";
 
 class App {
   constructor() {
@@ -49,7 +50,9 @@ class App {
     const height = this._divContainer.clientHeight;
     /* 크기를 이용해서 카메라 객체 생성 */
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 100);
-    camera.position.z = 30;
+    camera.position.y = 10;
+    camera.position.z = 20;
+    // camera.position.x = 40;
     this._camera = camera;
   }
 
@@ -114,7 +117,7 @@ class App {
     /* Moon */
     const moonOrbit = new THREE.Object3D();
     moonOrbit.position.x = 5;
-    earthOrbit.add(moonOrbit);
+
     const moonMaterial = new THREE.MeshPhongMaterial({
       color: 0x888888,
       emissive: 0x222222,
@@ -131,10 +134,13 @@ class App {
     );
     moonMesh.scale.set(0.5, 0.5, 0.5);
     moonOrbit.add(moonMesh);
+    earthOrbit.add(moonOrbit);
 
     this._solarSystem = solarSystem;
     this._mercuryOrbit = mercuryOrbit;
     this._earthOrbit = earthOrbit;
+    this._venusOrbit = venusOrbit;
+    this._mercuryOrbit = mercuryOrbit;
     this._moonOrbit = moonOrbit;
   }
 
@@ -163,10 +169,11 @@ class App {
   update(time) {
     time *= 0.001; // second unit
 
-    this._solarSystem.rotation.y = time / 2;
-    this._earthOrbit.rotation.y = time / 2;
-    this._earthOrbit.rotation.y = time / 10;
-    this._moonOrbit.rotation.y = time * 5;
+    this._solarSystem.rotation.y += 0.005;
+    this._earthOrbit.rotation.y += 0.005;
+    this._venusOrbit.rotation.y += 0.003;
+    this._mercuryOrbit.rotation.y = time / 40000;
+    this._moonOrbit.rotation.y = time * 1;
   }
 }
 
